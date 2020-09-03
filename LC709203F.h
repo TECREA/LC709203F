@@ -10,6 +10,8 @@
 
   #include <stdint.h>
 
+
+  #define LC709203F_SIZEREG                      ( 0x01u )
   #define LC709203F_ADDR_SLAVE                   ( 0x0Bu )            /* address slave */
   #define LC709203F_VCELL                        ( 0x09u )            /* cell voltage */
   #define LC709203F_RSOC                         ( 0x0Du )            /* Relative state of charge */
@@ -20,7 +22,7 @@
  * Pointer to functions type
  */
   typedef void (*Write_Fcn )(uint8_t, void*, uint8_t);
-  typedef void (*Read_Fcn  )(uint8_t, void*, uint8_t);
+  typedef void (*Read_Fcn  )(uint8_t, void*, uint8_t, uint8_t);
 
   typedef struct {
     Write_Fcn Write;

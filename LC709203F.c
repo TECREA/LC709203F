@@ -24,10 +24,10 @@ void LC709203F_Write(LC709203F_t *Obj, uint8_t Reg, uint16_t data, uint8_t amoun
 /*
  ** ==================== read two bytes register ====================
  */
-uint16_t LC709203F_Read(LC709203F_t *Obj, uint8_t Reg, uint8_t amount){
+uint16_t LC709203F_Read(LC709203F_t *Obj, uint8_t Reg, uint8_t amount) {
   uint8_t buffer[3];
   buffer[0] = Reg;
-  Obj->Read(Obj->Address, buffer, amount);
+  Obj->Read(Obj->Address, buffer, amount, LC709203F_SIZEREG);
   return buffer[1] << 8 | buffer[0];
 }
 
@@ -35,19 +35,23 @@ uint16_t LC709203F_Read(LC709203F_t *Obj, uint8_t Reg, uint8_t amount){
  ** ==================== Get battery voltage ====================
  */
 uint16_t LC709203F_Voltage(LC709203F_t *Obj){
-	return (uint16_t) ((LC709203F_Read(Obj, LC709203F_VCELL, 2)));
+	uint16_t data;
+	data = (uint16_t) ((LC709203F_Read(Obj, LC709203F_VCELL, 2)));
+	 if ((data > 5000) || (data < 1000)) data=0;
+	return data;
 }
 
 /*
  ** ==================== Get battery SOC (State of charge) ====================
  */
 uint16_t LC709203F_SOC(LC709203F_t *Obj){
-	return (uint16_t) ((LC709203F_Read(Obj, LC709203F_RSOC, 2)));
+	uint16_t data;
+	 data = (uint16_t) ((LC709203F_Read(Obj, LC709203F_RSOC, 2)));
+	 if ((data > 100)||(data < 0)) data=0;
+	return data;
 }
 
 /** ==================== Get ID chip SOC  ===================================*/
 uint16_t LC709203F_ID(LC709203F_t *Obj){
 	return (uint16_t) ((LC709203F_Read(Obj, LC709203F_REG_ID, 2)));
 }
-
-
