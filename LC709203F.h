@@ -21,12 +21,12 @@
 /**
  * Pointer to functions type
  */
-  typedef void (*Write_Fcn )(uint8_t, void*, uint8_t);
-  typedef void (*Read_Fcn  )(uint8_t, void*, uint8_t, uint8_t);
+  typedef void (*LC709203F_Write_Fcn_t )(uint8_t, void*, uint8_t);
+  typedef void (*LC709203F_Read_Fcn_t  )(uint8_t, void*, uint8_t, uint8_t);
 
   typedef struct {
-    Write_Fcn Write;
-    Read_Fcn  Read;
+    LC709203F_Write_Fcn_t Write;
+    LC709203F_Read_Fcn_t  Read;
     uint8_t   Address;
   }LC709203F_t;
 
@@ -37,7 +37,7 @@
    * @param Read  pointer to function i2c read
    * @param Addres_Device slave addres device
    */
-  void LC709203F_Init(LC709203F_t *Obj, Write_Fcn Write, Read_Fcn Read, uint8_t Addres_Device);
+  void LC709203F_Init(LC709203F_t *Obj, LC709203F_Write_Fcn_t Write, LC709203F_Read_Fcn_t Read, uint8_t Addres_Device);
 
   /**
    * @brief this function read register
@@ -78,19 +78,39 @@
    */
   uint16_t LC709203F_ID (LC709203F_t *Obj);
 
+  /*=======================================================================
+                EXAMPLE FOR I2C READ/WRITE wrappers
+   ========================================================================*/
+       
+  /* 
+  void Write_I2C(uint8_t Address, void *data, uint8_t amount){
+    uint8_t *DatatoSend = (uint8_t *)data;
+    HAL_I2C_Master_Transmit(&hi2c1,Address,DatatoSend,amount,10);
+  }
+  void Read_I2C(uint8_t Address, void *Register, uint8_t amount, uint8_t Sizereg){
+    uint8_t *DatatoSend = (uint8_t *)Register;
+    HAL_I2C_Master_Transmit(&hi2c1,Address,DatatoSend, Sizereg, 10);
+    HAL_I2C_Master_Receive(&hi2c1,Address,DatatoSend, amount, 10);
+  }
+=======================================================================
+                       Kinetes (Processor Expert)
+=======================================================================
+    void Write_I2C(uint8_t Address, void *data, uint8_t amount) {
+	  uint8_t *DatatoSend = (uint8_t *)data;
+	  uint16_t Bytes;
+	  I2C_SelectSlave(Address);                   // Send address device
+	  I2C_SendBlock(DatatoSend, amount, &Bytes);  // Register to read
+	  I2C_SendStop();                             // send Stop bit
+  }
+  void Read_I2C(uint8_t Address, void *Data, uint8_t amount, uint8_t Sizereg) {
+	  uint8_t *DatatoSend = (uint8_t *)Data;
+	  uint16_t Bytes;
+	  I2C_SelectSlave(Address);                     // Send address device
+	  I2C_SendBlock(DatatoSend, Sizereg, &Bytes);   // Register to read
+	  I2C_RecvBlock(DatatoSend, amount, &Bytes);    // Read data
+	  I2C_SendStop();                               // send Stop bit
+  }
+  */   
 
-   /* EXAMPLE FOR I2C READ/WRITE wrappers
-    **
-    **   void Write_I2C(uint8_t Address, void *data, uint8_t amount){
-    **   	uint8_t *DatatoSend = (uint8_t *)data;
-    **   	HAL_I2C_Master_Transmit(&hi2c1,Address,DatatoSend,amount,10);
-    **   }
-    **
-    **   void Read_I2C(uint8_t Address, void *Register, uint8_t amount){
-    **   	uint8_t *DatatoSend = (uint8_t *)Register;
-    **   	HAL_I2C_Master_Transmit(&hi2c1,Address,DatatoSend, 1, 10);
-    **   	HAL_I2C_Master_Receive(&hi2c1,Address,DatatoSend, amount, 10);
-    **   }
-   */
 
 #endif /* DRIVERS_HD_LC709203F_H_ */
