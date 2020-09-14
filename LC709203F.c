@@ -3,7 +3,7 @@
 /*
  ** ==================== Initialize library ====================
  */
-void LC709203F_Init(LC709203F_t *Obj, Write_Fcn Write, Read_Fcn Read, uint8_t Addres_Device){
+void LC709203F_Init(LC709203F_t *Obj, LC709203F_Write_Fcn_t Write, LC709203F_Read_Fcn_t Read, uint8_t Addres_Device){
   Obj->Write = Write;
   Obj->Read = Read;
   Obj->Address = Addres_Device;
