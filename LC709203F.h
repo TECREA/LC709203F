@@ -17,6 +17,9 @@
   #define LC709203F_RSOC                         ( 0x0Du )            /* Relative state of charge */
   #define LC709203F_REG_ITE                      ( 0x0Fu )            /* Indicator to empty */
   #define LC709203F_REG_ID                       ( 0x11u )            /* chip id */
+  #define LC709203F_POWER_MODE                   ( 0x15u )            /* power mode */
+  #define LC70920F_CMD_SLEEP					 ( 0X0002)
+  #define LC70920F_CMD_OP    					 ( 0X0001)
 
 /**
  * Pointer to functions type
@@ -77,12 +80,28 @@
    * @return version module
    */
   uint16_t LC709203F_ID (LC709203F_t *Obj);
+  
+    /**
+   * @brief This function Send Gauge to sleep Mode
+   * @param Obj Obj Structure containing all data from the LC709203F module.
+   * @return 
+   */
+
+  uint16_t LC709203F_SLEEP_MODE (LC709203F_t *Obj);
+  
+      /**
+   * @brief This function Send Gauge to Operational Mode
+   * @param Obj Obj Structure containing all data from the LC709203F module.
+   * @return 
+   */
+
+  uint16_t LC709203F_OP_MODE (LC709203F_t *Obj);
 
   /*=======================================================================
                 EXAMPLE FOR I2C READ/WRITE wrappers
    ========================================================================*/
-       
-  /* 
+
+  /*
   void Write_I2C(uint8_t Address, void *data, uint8_t amount){
     uint8_t *DatatoSend = (uint8_t *)data;
     HAL_I2C_Master_Transmit(&hi2c1,Address,DatatoSend,amount,10);
@@ -110,7 +129,9 @@
 	  I2C_RecvBlock(DatatoSend, amount, &Bytes);    // Read data
 	  I2C_SendStop();                               // send Stop bit
   }
-  */   
+  */
 
 
 #endif /* DRIVERS_HD_LC709203F_H_ */
+
+
